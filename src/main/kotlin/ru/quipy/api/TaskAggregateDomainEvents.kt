@@ -44,7 +44,7 @@ class TaskStatusClearedEvent(
 @DomainEvent(name = TASK_STATUS_SET_EVENT)
 class TaskStatusSetEvent(
     val taskId: UUID,
-    val statusId: UUID,
+    val statusName: String,
     val userId: UUID,
     createdAt: Long = System.currentTimeMillis()
 ) : Event<TaskAggregate>(

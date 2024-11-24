@@ -33,6 +33,7 @@ class UserAddedToProjectEvent(
 class TaskCreatedEvent(
     val projectId: UUID,
     val taskId: UUID,
+    val taskName: String,
     createdAt: Long = System.currentTimeMillis()
 ) : Event<ProjectAggregate>(
     name = TASK_CREATED_EVENT,
