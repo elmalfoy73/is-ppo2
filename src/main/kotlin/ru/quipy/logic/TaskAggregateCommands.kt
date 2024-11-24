@@ -18,7 +18,7 @@ fun TaskAggregateState.assignTaskToUser(assigneeId: UUID, assignerId: UUID): Tas
 }
 
 fun TaskAggregateState.clearTaskStatus(userId: UUID): TaskStatusClearedEvent {
-    if (status == null) {
+    if (statusName == null) {
         throw IllegalArgumentException("Task status is already cleared")
     }
     return TaskStatusClearedEvent(this.getId(), userId)
