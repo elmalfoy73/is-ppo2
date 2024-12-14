@@ -20,15 +20,24 @@ fun ProjectAggregateState.addTask(taskName: String): TaskCreatedEvent {
 }
 
 fun ProjectAggregateState.createStatus(statusName: String, creatorId: UUID): StatusCreatedEvent {
-    if (statuses.contains(statusName)) {
+    val containsStatus = statuses.values.any { it.name == statusName }
+    if (containsStatus) {
         throw IllegalArgumentException("Status $statusName already exists")
     }
+
     return StatusCreatedEvent(this.getId(), statusName, creatorId)
 }
 
 fun ProjectAggregateState.deleteStatus(statusName: String, deleterId: UUID): StatusDeletedEvent {
-    if (!statuses.contains(statusName)) {
+    val containsStatus = statuses.values.any { it.name == statusName }
+    if (!containsStatus) {
         throw IllegalArgumentException("Status $statusName does not exist")
+    }
+
+    for (task in tasks) {
+        if (statuses[task.value.statusAssigned]?.name == statusName) {
+            throw IllegalArgumentException("Status $statusName is set to task")
+        }
     }
     return StatusDeletedEvent(this.getId(), statusName, deleterId)
 }
