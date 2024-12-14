@@ -3,8 +3,8 @@ package ru.quipy.logic
 import ru.quipy.api.*
 import java.util.*
 
-fun ProjectAggregateState.createProject(name: String): ProjectCreatedEvent {
-    return ProjectCreatedEvent(name)
+fun ProjectAggregateState.createProject(name: String, userId: UUID): ProjectCreatedEvent {
+    return ProjectCreatedEvent(name, userId)
 }
 
 fun ProjectAggregateState.addUserToProject(userId: UUID): UserAddedToProjectEvent {
