@@ -6,39 +6,58 @@ import ru.quipy.domain.AggregateState
 import java.util.*
 
 class UserAggregateState : AggregateState<UUID, UserAggregate> {
-    private lateinit var userId: UUID
+    private lateinit var user: UserEntity
     var createdAt: Long = System.currentTimeMillis()
     var updatedAt: Long = System.currentTimeMillis()
 
-    lateinit var userName: String
-    lateinit var userLogin: String
-    lateinit var userPassword: String
+//    lateinit var userName: String
+//    lateinit var userLogin: String
+//    lateinit var userPassword: String
 
-    var users = mutableMapOf<String, UserEntity>()
+    var users = mutableMapOf<UUID, UserEntity>()
 
-    override fun getId() = userId
+    override fun getId() = user.id
 
     // State transition functions which is represented by the class member function
     @StateTransitionFunc
     fun userCreatedApply(event: UserCreatedEvent) {
-        userId = event.id
-        userName = event.name
-        userLogin = event.login
-        userPassword = event.password
+        user = UserEntity(
+            id = event.userID,
+            login = event.login,
+            password = event.password
+        )
+//        userId = event.id
+//        userName = event.name
+//        userLogin = event.login
+//        userPassword = event.password
         updatedAt = createdAt
+        createdAt = createdAt
     }
 
     @StateTransitionFunc
     fun userAuthorisedApply(event: UserAuthorizedEvent) {
-        userId = event.id
-        userName = event.name
-        userLogin = event.login
+//        userId = event.id
+//        userLogin = event.login
+        user = UserEntity(id = event.userID,
+                          login = event.login,
+                          password = event.password)
         updatedAt = createdAt
+    }
+
+    @StateTransitionFunc
+    fun userUpdatedApply(event: UserUpdatedEvent) {
+        user = UserEntity(
+            id = event.userID,
+            login = event.login,
+            password = event.password
+        )
+
+        updatedAt = event.createdAt
     }
 }
 
 data class UserEntity(
-    val id: UUID,
-    val login: String,
-    val password: String
+    val id: UUID = UUID.randomUUID(),
+    val login: String = "",
+    val password: String = ""
 )

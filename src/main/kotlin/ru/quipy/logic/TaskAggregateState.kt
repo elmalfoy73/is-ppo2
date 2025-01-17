@@ -36,7 +36,7 @@ class TaskAggregateState : AggregateState<UUID, TaskAggregate> {
     }
 
     @StateTransitionFunc
-    fun TaskStatusClearedApply(event: TaskStatusClearedEvent) {
+    fun taskStatusClearedApply(event: TaskStatusClearedEvent) {
         statusName = null
         updatedAt = event.createdAt
     }

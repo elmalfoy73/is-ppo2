@@ -7,11 +7,13 @@ fun ProjectAggregateState.createProject(name: String, userId: UUID): ProjectCrea
     return ProjectCreatedEvent(name, userId)
 }
 
-fun ProjectAggregateState.addUserToProject(userId: UUID): UserAddedToProjectEvent {
+fun ProjectAggregateState.addUserToProject(userId: UUID, login: String, projectId: UUID,): UserAddedToProjectEvent {
     if (users.contains(userId)) {
         throw IllegalArgumentException("User with ID $userId is already part of the project")
     }
-    return UserAddedToProjectEvent(this.getId(), userId)
+    return UserAddedToProjectEvent(userId = userId,
+                                   login = login,
+                                    projectId = projectId)
 }
 
 fun ProjectAggregateState.addTask(taskName: String): TaskCreatedEvent {
@@ -40,6 +42,13 @@ fun ProjectAggregateState.deleteStatus(statusName: String, deleterId: UUID): Sta
         }
     }
     return StatusDeletedEvent(this.getId(), statusName, deleterId)
+}
+
+fun ProjectAggregateState.updateProject(id: UUID, name: String): ProjectUpdatedEvent {
+    return ProjectUpdatedEvent(
+        projectID = id,
+        projectName = name,
+    )
 }
 
 //fun ProjectAggregateState.setTaskStatus(statusName: String, userId: UUID): TaskStatusSetEvent {
