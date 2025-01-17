@@ -41,3 +41,10 @@ fun ProjectAggregateState.deleteStatus(statusName: String, deleterId: UUID): Sta
     }
     return StatusDeletedEvent(this.getId(), statusName, deleterId)
 }
+
+//fun ProjectAggregateState.setTaskStatus(statusName: String, userId: UUID): TaskStatusSetEvent {
+//    if (this.tasks)//(this.statusName == statusName) {
+//        throw IllegalArgumentException("Task status is already set to $statusName")
+//    }
+//    return TaskStatusSetEvent(this.getId(), statusName, userId)
+//}

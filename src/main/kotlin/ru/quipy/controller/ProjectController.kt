@@ -19,9 +19,10 @@ class ProjectController(
 
     @PostMapping("/create")
     fun createProject(
-        @RequestParam(required = true, value = "projectName") projectName: String) : ProjectCreatedEvent {
+        @RequestParam(required = true, value = "projectName") projectName: String,
+        @RequestParam(required = true, value = "userId") userId: UUID) : ProjectCreatedEvent {
         return projectEsService.create {
-            it.createProject(projectName)
+            it.createProject(projectName, userId)
         }
     }
 
@@ -50,6 +51,8 @@ class ProjectController(
             it.createStatus(statusName, creatorId)
         }
     }
+
+
 
     @DeleteMapping("/{projectId}/deleteStatus/{statusName}")
     fun deleteStatus(
