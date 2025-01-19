@@ -33,7 +33,7 @@ fun UserAggregateState.authorizeUser(login: String, password: String): UserAutho
     )
 }
 
-fun UserAggregateState.updateUser(id: UUID, login: String, name: String, password: String): UserUpdatedEvent {
+fun UserAggregateState.updateUser(id: UUID, login: String, password: String): UserUpdatedEvent {
     return UserUpdatedEvent(
         userID = id,
         login = login,
