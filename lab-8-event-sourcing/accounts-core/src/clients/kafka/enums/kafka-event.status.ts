@@ -1,0 +1,6 @@
+export enum KafkaEventStatus {
+  INITIATED = 'INITIATED',
+  PROCESSING = 'PROCESSING',
+  SUCCEEDED = 'SUCCEEDED',
+  FAILED = 'FAILED',
+}
