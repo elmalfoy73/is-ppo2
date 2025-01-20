@@ -2,8 +2,8 @@ package ru.quipy.repository
 
 import org.springframework.data.mongodb.repository.MongoRepository
 import ru.quipy.logic.UserEntity
+import ru.quipy.projections.UserTasksProjection
 import java.util.*
 
-interface UserRepository : MongoRepository<UserEntity, UUID> {
-    fun findByLogin(login: String): MutableList<UserEntity>
+interface UserTasksRepository : MongoRepository<UserTasksProjection, UUID> {
 }

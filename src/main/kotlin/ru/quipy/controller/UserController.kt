@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.RestController
 import ru.quipy.api.*
 import ru.quipy.core.EventSourcingService
 import ru.quipy.logic.*
+import ru.quipy.projections.TaskEntity
+import ru.quipy.service.UserTasksService
 import java.util.*
 
 @RestController
 @RequestMapping("/users")
 class UserController(
-        val userEsService: EventSourcingService<UUID, UserAggregate, UserAggregateState>
+    val userEsService: EventSourcingService<UUID, UserAggregate, UserAggregateState>,
+    val userTasksService: UserTasksService
 ) {
 
     @PostMapping("/create")
@@ -33,5 +36,10 @@ class UserController(
         return userEsService.update(userId) {
             it.authorizeUser(login, password)
         }
+    }
+
+    @GetMapping("/{userId}/tasks")
+    fun getUserTasks(@PathVariable userId : UUID) : List<UUID> {
+        return userTasksService.findUserTasks(userId)
     }
 }

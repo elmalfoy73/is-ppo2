@@ -3,6 +3,9 @@ package ru.quipy.logic
 import ru.quipy.api.*
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
+import ru.quipy.projections.MemberEntity
+import ru.quipy.projections.StatusEntity
+import ru.quipy.projections.TaskEntity
 import java.util.*
 
 class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
@@ -14,12 +17,12 @@ class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
     lateinit var projectName: String
     var tasks = mutableMapOf<UUID, TaskEntity>()
     var statuses = mutableMapOf<UUID, StatusEntity>()
-    var users = mutableMapOf<UUID, MemberEntity>()
+    var members = mutableMapOf<UUID, MemberEntity>()
 
     override fun getId() = projectId
     fun getName() = projectName
-    fun getMembers() = users.values.toList()
-    fun getMemberByID(id: UUID) = users[id]
+    fun getMembers() = members.values.toList()
+    fun getMemberByID(id: UUID) = members[id]
 
 
     @StateTransitionFunc
@@ -32,7 +35,7 @@ class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
 
     @StateTransitionFunc
     fun userAddedApply(event: UserAddedToProjectEvent) {
-        users[event.userId] = MemberEntity(id = event.userId, login = event.login)
+        members[event.userId] = MemberEntity(id = event.userId, login = event.login)
         projectId = event.projectId
         updatedAt = event.createdAt
     }
@@ -66,23 +69,5 @@ class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
     }
 }
 
-data class ProjectEntity(
-    val id: UUID = UUID.randomUUID(),
-    var name: String = "",
-)
 
-data class TaskEntity(
-    val id: UUID = UUID.randomUUID(),
-    val name: String,
-    val statusAssigned: String?
-)
-
-data class StatusEntity(
-    val name: String
-)
-
-data class MemberEntity(
-    val id: UUID = UUID.randomUUID(),
-    val login: String
-)
 

@@ -6,7 +6,7 @@ import ru.quipy.domain.AggregateState
 import java.util.*
 
 class UserAggregateState : AggregateState<UUID, UserAggregate> {
-    private lateinit var user: UserEntity
+    lateinit var user: UserEntity
     var createdAt: Long = System.currentTimeMillis()
     var updatedAt: Long = System.currentTimeMillis()
 

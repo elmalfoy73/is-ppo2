@@ -8,7 +8,7 @@ fun ProjectAggregateState.createProject(name: String, userId: UUID): ProjectCrea
 }
 
 fun ProjectAggregateState.addUserToProject(userId: UUID, login: String, projectId: UUID,): UserAddedToProjectEvent {
-    if (users.contains(userId)) {
+    if (members.contains(userId)) {
         throw IllegalArgumentException("User with ID $userId is already part of the project")
     }
     return UserAddedToProjectEvent(userId = userId,

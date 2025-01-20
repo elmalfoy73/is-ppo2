@@ -4,12 +4,19 @@ import org.springframework.web.bind.annotation.*
 import ru.quipy.api.*
 import ru.quipy.core.EventSourcingService
 import ru.quipy.logic.*
+import ru.quipy.projections.MemberEntity
+import ru.quipy.projections.StatusEntity
+import ru.quipy.projections.TaskEntity
+import ru.quipy.service.ProjectMembersService
+import ru.quipy.service.ProjectTasksService
 import java.util.*
 
 @RestController
 @RequestMapping("/projects")
 class ProjectController(
-    val projectEsService: EventSourcingService<UUID, ProjectAggregate, ProjectAggregateState>
+    val projectEsService: EventSourcingService<UUID, ProjectAggregate, ProjectAggregateState>,
+    val projectMembersService: ProjectMembersService,
+    val projectTasksService: ProjectTasksService,
 ) {
 
     @GetMapping("/{id}")
@@ -48,6 +55,11 @@ class ProjectController(
         }
     }
 
+    @GetMapping("/{projectId}/tasks/{taskId}")
+    fun getTask(@PathVariable projectId: UUID, @PathVariable taskId: UUID): TaskEntity? {
+        return projectEsService.getState(projectId)?.tasks?.get(taskId)
+    }
+
     @PostMapping("/{projectId}/tasks/{taskName}")
     fun createTask(@PathVariable projectId: UUID, @PathVariable taskName: String) : TaskCreatedEvent {
         return projectEsService.update(projectId) {
@@ -65,7 +77,10 @@ class ProjectController(
         }
     }
 
-
+    @GetMapping("/{projectId}/statuses")
+    fun getStatuses(@PathVariable projectId: UUID) : Set<StatusEntity> {
+        return projectEsService.getState(projectId)?.statuses!!.values.toSet()
+    }
 
     @DeleteMapping("/{projectId}/deleteStatus/{statusName}")
     fun deleteStatus(
@@ -75,5 +90,15 @@ class ProjectController(
         return projectEsService.update(projectId) {
             it.deleteStatus(statusName, deleterId)
         }
+    }
+
+    @GetMapping("/{projectId}/members")
+    fun getMembers(@PathVariable projectId: UUID) : Set<MemberEntity> {
+        return projectMembersService.findProjectMembers(projectId)
+    }
+
+    @GetMapping("/{projectId}/tasks")
+    fun getTasks(@PathVariable projectId: UUID) : Set<TaskEntity> {
+        return projectTasksService.findProjectTasks(projectId)
     }
 }

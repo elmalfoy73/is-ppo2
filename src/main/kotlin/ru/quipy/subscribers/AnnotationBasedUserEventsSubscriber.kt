@@ -1,4 +1,4 @@
-package ru.quipy.projections
+package ru.quipy.subscribers
 
 class AnnotationBasedUserEventsSubscriber {
 }
