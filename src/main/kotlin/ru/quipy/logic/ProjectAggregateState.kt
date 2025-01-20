@@ -58,6 +58,12 @@ class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
         statuses[event.id] = StatusEntity( name = event.statusName)
         updatedAt = createdAt
     }
+
+    @StateTransitionFunc
+    fun projectUpdatedApply(event: ProjectUpdatedEvent) {
+        projectName = event.projectName
+        updatedAt = createdAt
+    }
 }
 
 data class ProjectEntity(

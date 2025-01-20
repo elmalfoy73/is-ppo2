@@ -94,8 +94,4 @@ class ProjectProjection(
     fun findProject(projectID: UUID): ProjectEntity? {
         return projectRepository.findByIdOrNull(projectID)
     }
-
-    fun getAllProjectMembers(projectID: UUID): List<MemberEntity> {
-        return memberRepository.findAllByProjectID(projectID)
-    }
 }
