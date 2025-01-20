@@ -9,7 +9,7 @@ import ru.quipy.api.UserUpdatedEvent
 import ru.quipy.core.EventSourcingService
 import ru.quipy.logic.UserAggregateState
 import ru.quipy.logic.UserEntity
-import ru.quipy.logic.UserRepository
+import ru.quipy.repository.UserRepository
 import ru.quipy.streams.AggregateSubscriptionsManager
 import java.util.*
 import javax.annotation.PostConstruct

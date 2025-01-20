@@ -32,8 +32,6 @@ class UserAddedToProjectEvent(
     createdAt = createdAt
 )
 
-
-
 @DomainEvent(name = STATUS_CREATED_EVENT)
 class StatusCreatedEvent(
     val projectId: UUID,

@@ -4,14 +4,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import ru.quipy.api.ProjectAggregate
-import ru.quipy.api.ProjectCreatedEvent
-import ru.quipy.api.ProjectUpdatedEvent
-import ru.quipy.api.UserAddedToProjectEvent
+import ru.quipy.api.*
 import ru.quipy.logic.MemberEntity
-import ru.quipy.logic.MemberRepository
+import ru.quipy.repository.MemberRepository
 import ru.quipy.logic.ProjectEntity
-import ru.quipy.logic.ProjectRepository
+import ru.quipy.logic.StatusEntity
+import ru.quipy.logic.TaskEntity
+import ru.quipy.repository.ProjectRepository
+import ru.quipy.repository.StatusRepository
+import ru.quipy.repository.TaskRepository
 import ru.quipy.streams.AggregateSubscriptionsManager
 import java.util.*
 import javax.annotation.PostConstruct
@@ -21,6 +22,8 @@ import javax.annotation.PostConstruct
 class ProjectProjection(
     private val projectRepository: ProjectRepository,
     private val memberRepository: MemberRepository,
+    private val taskRepository: TaskRepository,
+    private val statusRepository: StatusRepository,
     private val subManager: AggregateSubscriptionsManager,
 ) {
     @PostConstruct
@@ -52,6 +55,35 @@ class ProjectProjection(
                         ProjectEntity(
                             event.projectID,
                             event.projectName
+                        )
+                    )
+                }
+            }
+            `when`(StatusCreatedEvent::class) { event ->
+                withContext(Dispatchers.IO) {
+                    statusRepository.save(
+                        StatusEntity(
+                            event.statusName
+                        )
+                    )
+                }
+            }
+            `when`(StatusDeletedEvent::class) { event ->
+                withContext(Dispatchers.IO) {
+                    statusRepository.delete(
+                        StatusEntity(
+                            event.statusName
+                        )
+                    )
+                }
+            }
+            `when`(TaskCreatedEvent::class) { event ->
+                withContext(Dispatchers.IO) {
+                    taskRepository.save(
+                        TaskEntity(
+                            event.taskId,
+                            event.taskName,
+                            null,
                         )
                     )
                 }

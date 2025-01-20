@@ -4,7 +4,6 @@ import ru.quipy.api.*
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
 import java.util.*
-import javax.persistence.Id
 
 class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
     private lateinit var projectId: UUID
@@ -56,8 +55,7 @@ class ProjectAggregateState : AggregateState<UUID, ProjectAggregate> {
 
     @StateTransitionFunc
     fun statusCreatedApply(event: StatusCreatedEvent) {
-
-        statuses[event.id] = StatusEntity(id = event.id, name = event.statusName)
+        statuses[event.id] = StatusEntity( name = event.statusName)
         updatedAt = createdAt
     }
 }
@@ -70,11 +68,10 @@ data class ProjectEntity(
 data class TaskEntity(
     val id: UUID = UUID.randomUUID(),
     val name: String,
-    val statusAssigned: UUID?
+    val statusAssigned: String?
 )
 
 data class StatusEntity(
-    val id: UUID = UUID.randomUUID(),
     val name: String
 )
 

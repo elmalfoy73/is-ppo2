@@ -37,7 +37,7 @@ fun ProjectAggregateState.deleteStatus(statusName: String, deleterId: UUID): Sta
     }
 
     for (task in tasks) {
-        if (statuses[task.value.statusAssigned]?.name == statusName) {
+        if (task.value.statusAssigned == statusName) {
             throw IllegalArgumentException("Status $statusName is set to task")
         }
     }
