@@ -22,7 +22,7 @@ class TaskController(
     }
 
     @GetMapping("/{taskId}/assignTaskToUser")
-    fun getAccount(
+    fun assignTaskToUser(
         @PathVariable taskId: UUID,
         @RequestParam userId: UUID): TaskAssignedToUserEvent {
         return taskEsService.update(taskId) {
